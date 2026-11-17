@@ -33,6 +33,7 @@ Sempre na raiz do projeto. Os nomes de dashboard são as pastas de `dashboards/`
 | `npm run emular -- <nome ou .zip>` | Abrir o pacote como o ERP abre, na sua máquina, antes de subir: executa `<snk:query>`/JSTL e simula `openApp` |
 | `npm run verificar -- <nome ou .zip> [--consertar]` | Conferir um `.zip`, inclusive feito fora do kit |
 | `npm run diagnostico -- [nome]` | Gerar o pacote de testes para quando o componente não abre no ERP |
+| — | Usuários sem DBExplorer: [consultas no servidor](docs/consultas-no-servidor.md) (`consultasServidor` no `dashboard.json`) |
 | `npm run proxy` | Subir só o proxy de dados, para quem usa servidor de dev próprio |
 
 ## Documentação

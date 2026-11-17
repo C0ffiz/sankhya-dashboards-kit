@@ -4,7 +4,7 @@
 <%--
   Modelo da stack "jsp": o SQL roda NO SERVIDOR (<snk:query>) quando o ERP monta a página.
   O navegador recebe só o resultado — não precisa de permissão para consultar pelo navegador
-  (é assim que funciona o PAINEL FISCAL). Não há preview local: publique na base de testes.
+  (SQL no servidor). Não há preview local: publique na base de testes.
 
   Regras (docs/stacks.md):
   - arquivos do pacote sempre por ${BASE_FOLDER}<arquivo>  (caminho relativo não carrega no ERP)

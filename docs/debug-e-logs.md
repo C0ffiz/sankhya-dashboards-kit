@@ -6,7 +6,7 @@ Guia para quando um dashboard **não abre no ERP**, **abre em branco** ou **não
 |---|---|
 | "Internal Server Error" ao abrir o componente | [Etapa 2](#2-no-erp-o-devtools) e depois [Etapa 3](#3-pacote-de-diagnóstico) |
 | Abre em branco ou sem estilo | [Etapa 2](#2-no-erp-o-devtools): procure 404 nos arquivos |
-| Abre, mas aparece erro de consulta | [Etapa 3](#3-pacote-de-diagnóstico): testes T4 e T5 |
+| Abre, mas aparece erro de consulta | [Etapa 3](#3-pacote-de-diagnóstico): testes T4, T5 e T6 |
 | Funciona para você e não para outro usuário | [Etapa 3](#3-pacote-de-diagnóstico) aberto **com o usuário que falha** |
 | Funciona no `npm run dev` e não no ERP | [Etapa 1](#1-antes-de-subir-emular-e-verificar) |
 
@@ -102,12 +102,13 @@ npm run diagnostico                # só os testes
 | `t3.jsp` | + `${BASE_FOLDER}`, `${CODUSU_LOG}`, arquivos do pacote por `${BASE_FOLDER}` e por caminho relativo, SankhyaJX, `openApp` | Se `js_base=falhou`: o `.zip` não publica as pastas (falta entrada de pasta). `js_relativo=falhou` é **esperado**. |
 | `t4.jsp` | Consulta pelo navegador (`JX.post` → `DbExplorerSP`) com a sessão do usuário | O usuário não pode consultar pelo navegador: dashboards vite/html não trazem dados para ele. |
 | `t5.jsp` | Consulta no servidor (`<snk:query>`) | Veja a mensagem: SQL ou permissão no servidor. |
+| `t6.jsp` | Consultas no servidor chamadas pelo dashboard (`dados.jsp`, [consultas no servidor](consultas-no-servidor.md)), e recusa de valor não numérico | Se T5 passa e T6 falha: a chamada ao `dados.jsp` (veja a mensagem). Se disser que o valor não numérico **não** foi recusado, não publique e abra uma issue. |
 | `painel.jsp` (ou a sua entrada) | O dashboard completo | Se t1–t3 passam e só ele falha, o problema está no conteúdo do dashboard: veja os erros conhecidos. |
 
 Combinações comuns:
 
 - **t1–t5 OK, dashboard 500** → o nome da entrada ou o JSP do dashboard. Rode `npm run verificar` no `.zip` do dashboard.
-- **T4 falha e T5 funciona** → permissão do usuário para consultar pelo navegador. Use a stack `jsp` ou ajuste a permissão.
+- **T4 falha e T5/T6 funcionam** → o usuário não pode consultar pelo navegador. Use [consultas no servidor](consultas-no-servidor.md) (ou a stack `jsp`).
 - **t1 falha** → nada a ver com o dashboard. Confira o upload e o ambiente.
 
 ## 4. Log do servidor
@@ -150,7 +151,7 @@ Use o modelo **"Problema no ERP"** do repositório e inclua:
 | 500 ao abrir; o `.zip` tem pastas | Zip **sem a entrada de pasta** (`assets/`) antes dos arquivos | `npm run verificar -- x.zip --consertar`. O build do kit já gera no formato certo. | kit 2.0 |
 | Página abre sem estilo/JS; 404 em `/mge/assets/...` | **Caminho relativo** (`./assets/x.js`): a página é servida em `/mge/html5component.mge`, então `./` aponta para `/mge/` | `${BASE_FOLDER}assets/x.js`. O build troca sozinho (vite/html) e recusa em JSP. | kit 2.0 |
 | `window.JX` é `undefined`, mas o dashboard funciona | O SankhyaJX é `class JX` global, que não vira propriedade de `window` | Normal. Use `JX`/`typeof JX`. | — |
-| Dashboard abre, mas a consulta falha só para alguns usuários | Esses usuários não podem usar `DbExplorerSP.executeQuery` pelo navegador | Confirme com T4/T5 logado como o usuário. Use a stack `jsp` ou ajuste a permissão (não libere o DBExplorer para todos: ele permite consultar qualquer tabela). | — |
+| Dashboard abre, mas a consulta falha só para alguns usuários | Esses usuários não podem usar `DbExplorerSP.executeQuery` pelo navegador | Confirme com T4/T6 logado como o usuário. Use [consultas no servidor](consultas-no-servidor.md) (não libere o DBExplorer para todos: ele permite consultar qualquer tabela). | — |
 | Página JSP inteira dá 500 depois de mudar um SQL | `<snk:query>` com erro, sem `<c:catch>` | Envolva cada consulta em `<c:catch var="erro">` e mostre `${erro.message}`. | — |
 | Alteração no componente fica "pendente" em produção | Produção exige aprovação do SUP (Autorização de Customizações) | Teste na base de testes; leve para produção só a versão final. | — |
 | `${algo}` some do JS/CSS inline do JSP | O servidor interpreta `${...}` em todo o `.jsp` | JS/CSS em arquivos (`${BASE_FOLDER}...`), ou JS sem `${`. | — |

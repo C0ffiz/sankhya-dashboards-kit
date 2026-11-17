@@ -2,6 +2,16 @@
 
 Versionamento semântico. Projetos que usam o kit como dependência: veja [docs/usar-como-dependencia.md](docs/usar-como-dependencia.md).
 
+## 2.2.0 — 2026-11-17
+
+### Novo: consultas no servidor, para usuários sem permissão no DBExplorer
+
+- `consultasServidor` no `dashboard.json` aponta para um módulo com o SQL do dashboard, com nome para cada consulta. O build gera `dados.jsp` (`<snk:query>`), e `consultarServidor` / `consultarServidorLote` (`sankhya-kit/dados.js`) pedem as consultas pelo nome. Guia: [consultas no servidor](docs/consultas-no-servidor.md).
+- Segurança: o SQL fica fixo no pacote e todo valor vindo do navegador é convertido a número no próprio JSP. O build recusa SQL que não seja `SELECT`/`WITH`, com `;`, EL ou tags JSP.
+- `npm run dev` executa o mesmo `dados.jsp` no proxy local (`GET /api/dados`). O emulador também: `paramValues` e a entrada do `dashboard.json` como página inicial.
+- Diagnóstico: **T6** testa esse caminho no ERP, com o usuário logado, e confere que valor não numérico é recusado.
+- Exemplos e textos sem nomes de painéis de empresas.
+
 ## 2.1.0 — 2026-11-17
 
 ### Novo: o emulador executa o lado do servidor
