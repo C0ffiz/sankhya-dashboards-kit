@@ -6,7 +6,7 @@
 <head><meta charset="UTF-8"><snk:load/><title>T5 - consulta no servidor</title></head>
 <body style="font:14px system-ui,sans-serif;padding:16px">
 <h2>T5: consulta SQL no servidor (&lt;snk:query&gt;)</h2>
-<p>O SQL roda no servidor ao montar a página; o navegador só recebe o resultado (é como o PAINEL FISCAL funciona).</p>
+<p>O SQL roda no servidor ao montar a página; o navegador só recebe o resultado (como nos dashboards da stack jsp).</p>
 <c:catch var="erroConsulta">
   <snk:query var="consulta">SELECT COUNT(*) AS QTD FROM TSIEMP</snk:query>
 </c:catch>

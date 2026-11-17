@@ -134,7 +134,9 @@ e mostra o resultado. Se esta página não abrir, troque o <code>entryPoint</cod
     if (r.t3 && !ok('t3')) c.push('T3: os arquivos do pacote não carregaram pela pasta BASE_FOLDER. Confira se o .zip tem as entradas de pasta (npm run verificar -- arquivo.zip).');
     if (ok('t3') && /js_relativo=falhou/.test(r.t3.detalhe)) c.push('Caminho relativo (./assets) não funciona neste ERP, como esperado: os arquivos precisam ser referenciados por ${BASE_FOLDER}.');
     if (r.t5 && r.t5.pulado) c.push('T5 não foi testado (o emulador local não executa snk:query): rode o diagnóstico no ERP para esse teste.');
-    if (r.t4 && !ok('t4') && ok('t5')) c.push('T4 falhou e T5 funcionou: este usuário não pode consultar pelo navegador (DbExplorerSP). Para ele, use dashboards da stack jsp (consulta no servidor com snk:query).');
+    if (r.t4 && !ok('t4') && ok('t5')) c.push('T4 falhou e T5 funcionou: este usuário não pode consultar pelo navegador (DbExplorerSP). Para ele, use consultas no servidor (consultasServidor no dashboard.json, ver T6) ou a stack jsp.');
+    if (r.t6 && ok('t6')) c.push('T6 OK: consultas no servidor funcionam para este usuário, sem DBExplorer. Dashboards com "consultasServidor" abrem para ele.');
+    if (r.t6 && !ok('t6') && ok('t5')) c.push('T6 falhou e T5 funcionou: o snk:query roda, mas a chamada do dashboard ao dados.jsp não. Veja o detalhe do T6.');
     if (ok('t4')) c.push('T4 OK: este usuário consegue consultar pelo navegador; dashboards das stacks vite/html funcionam para ele.');
     if (r.t5 && !ok('t5') && !r.t5.pulado) c.push('T5 falhou: a consulta no servidor (snk:query) não funcionou neste servidor; veja o detalhe.');
     testes.filter(function (t) { return t.painel; }).forEach(function (t) {

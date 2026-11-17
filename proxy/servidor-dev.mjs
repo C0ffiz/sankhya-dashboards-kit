@@ -95,12 +95,25 @@ export function mensagemDeFalha(e) {
  * Sobe o proxy em 127.0.0.1:<porta>. Lê as credenciais do .env da raiz do projeto (pasta do comando).
  * @returns {Promise<import('node:http').Server>}
  */
-export async function iniciarProxy({ porta = 8787 } = {}) {
+/**
+ * @param {{ porta?: number, jspDados?: () => Promise<string|null> }} [opcoes]
+ *   jspDados: devolve o dados.jsp do dashboard (consultas no servidor). GET /api/dados o executa como o ERP
+ *   executaria (lib/jsp-emulado.mjs), com o SQL indo pelo mesmo executor (só leitura).
+ */
+export async function iniciarProxy({ porta = 8787, jspDados } = {}) {
   const executar = criarExecutor();
+  const executarSql = async (sql) => {
+    try {
+      return await executar(sql);
+    } catch (e) {
+      return { status: '0', statusMessage: e.status || e.cause ? mensagemDeFalha(e) : e.message };
+    }
+  };
 
   const servidor = createServer(async (req, res) => {
     if (!hostLocal(req)) return erro(res, 403, 'Host não permitido.');
     if (req.method === 'GET' && req.url === '/api/saude') return responder(res, 200, { ok: true });
+    if (req.method === 'GET' && req.url.startsWith('/api/dados?')) return servirDados(req, res);
     if (req.method !== 'POST' || req.url !== '/api/sql') return erro(res, 404, 'Rota inexistente.');
     if (!String(req.headers['content-type'] || '').includes('application/json')) {
       return erro(res, 415, 'Envie Content-Type: application/json.');
@@ -123,11 +136,32 @@ export async function iniciarProxy({ porta = 8787 } = {}) {
     }
   });
 
+  async function servirDados(req, res) {
+    const html = (codigo, corpo) => {
+      res.writeHead(codigo, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(corpo);
+    };
+    try {
+      const jsp = jspDados ? await jspDados() : null;
+      if (!jsp) return html(404, 'Este dashboard não declara "consultasServidor" no dashboard.json.');
+      const { renderizarJsp } = await import('../lib/jsp-emulado.mjs');
+      const busca = [...new URL(req.url, 'http://127.0.0.1').searchParams];
+      const atributos = {
+        __param: Object.fromEntries([...busca].reverse()),
+        __paramValues: busca.reduce((acc, [k, v]) => ((acc[k] ??= []).push(v), acc), {}),
+      };
+      html(200, await renderizarJsp(jsp, { atributos, executarSql }));
+    } catch (e) {
+      console.error(`[proxy] dados.jsp: ${e.message}`);
+      html(500, `Internal Server Error (dados.jsp): ${e.message.replace(/[<&]/g, ' ')}`);
+    }
+  }
+
   await new Promise((ok, falha) => {
     servidor.once('error', (e) => falha(new Error(`Não foi possível usar a porta ${porta}: ${e.message}`)));
     servidor.listen(porta, '127.0.0.1', ok);
   });
-  console.log(`[proxy] ouvindo em http://127.0.0.1:${porta}  (POST /api/sql, somente leitura)`);
+  console.log(`[proxy] ouvindo em http://127.0.0.1:${porta}  (POST /api/sql${jspDados ? ', GET /api/dados' : ''}, somente leitura)`);
   return servidor;
 }
 
