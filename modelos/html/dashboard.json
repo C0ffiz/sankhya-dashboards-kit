@@ -1,0 +1,7 @@
+{
+  "stack": "html",
+  "entrada": "painel.jsp",
+  "build": "npm run build",
+  "dev": "npm run dev",
+  "pasta": "dist"
+}

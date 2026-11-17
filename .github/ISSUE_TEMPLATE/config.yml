@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Guia de debug e logs
+    url: https://github.com/C0ffiz/sankhya-dashboards-kit/blob/main/docs/debug-e-logs.md
+    about: Leia antes de abrir a issue — a maioria dos problemas no ERP se resolve com o diagnóstico.

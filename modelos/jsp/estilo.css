@@ -1,0 +1,8 @@
+body { margin: 0; background: #f7f7f5; color: #1d1d1b; font: 14px system-ui, -apple-system, "Segoe UI", sans-serif; }
+.painel { max-width: 960px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 20px; margin: 0; }
+.sub { color: #5c5b57; margin: 4px 0 16px; }
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e1e0d9; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #ecebe6; }
+th { font-size: 12px; color: #5c5b57; }
+.erro { background: #fdeceb; color: #8c1d18; border: 1px solid #f3c1bd; border-radius: 8px; padding: 10px 12px; }

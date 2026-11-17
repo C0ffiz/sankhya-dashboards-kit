@@ -6,6 +6,8 @@
 
 O build copia este arquivo para `assets/jx.min.js` dentro do `.zip`; nada é baixado da internet em produção.
 
+O SankhyaJX se declara como `class JX` global: use `JX` (ou `typeof JX`), nunca `window.JX`, que é `undefined`.
+
 Observação: `JX.consultar` devolve `[]` quando o SQL falha (não lança erro). Por isso
 `dados.js` usa `JX.post` no mesmo endpoint (`DbExplorerSP.executeQuery`) e verifica o `status`.
 

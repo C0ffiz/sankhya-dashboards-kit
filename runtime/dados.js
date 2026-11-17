@@ -1,8 +1,10 @@
 /**
  * Camada de dados híbrida — ÚNICO ponto de acesso a dados dos dashboards.
  *
- * - Desenvolvimento (`npm run dev`): POST /api/sql → proxy Python local → API do Sankhya (credenciais do .env).
- * - Produção (index.jsp no ERP): SankhyaJX (JX.post) → /mge/service.sbr, usando a sessão do usuário logado.
+ * - Desenvolvimento (`npm run dev`): POST /api/sql → proxy local do kit (proxy/) → API do Sankhya (credenciais do .env).
+ * - Produção (painel.jsp no ERP): SankhyaJX (JX.post) → /mge/service.sbr, usando a sessão do usuário logado.
+ *
+ * Importe nos dashboards como:  import { consultarSQL } from 'sankhya-kit/dados.js';
  *
  * `import.meta.env.DEV` é resolvido no build: o ramo do proxy é eliminado do pacote final.
  * Os dois caminhos recebem a MESMA resposta crua do DbExplorerSP.executeQuery e passam por `normalizar`.
