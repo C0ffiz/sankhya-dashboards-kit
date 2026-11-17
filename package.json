@@ -1,0 +1,25 @@
+{
+  "name": "sankhya-dashboards-kit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kit para criar dashboards HTML5 do Construtor de Componentes de BI do Sankhya com dados reais em desenvolvimento",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "node build/dev.mjs",
+    "build": "node build/empacotar.mjs",
+    "novo": "node build/novo.mjs",
+    "proxy": "node proxy/servidor-dev.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "fflate": "^0.8.3",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.8"
+  },
+  "dependencies": {
+    "echarts": "^6.1.0"
+  }
+}
