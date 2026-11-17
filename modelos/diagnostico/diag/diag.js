@@ -9,7 +9,7 @@
       li.style.color = ok ? '#0a6b2f' : '#b3261e';
     }
   };
-  var openApp = typeof window.openApp === 'function' ? 'function' : (function () {
+  var openApp = typeof window.openApp === 'function' ? (window.openApp.emulado ? 'function (emulado)' : 'function') : (function () {
     try { return window.parent !== window && typeof window.parent.openApp === 'function' ? 'function (janela de cima)' : 'ausente'; } catch (e) { return 'ausente'; }
   })();
   var jx = typeof JX !== 'undefined' ? 'carregado' : 'ausente';

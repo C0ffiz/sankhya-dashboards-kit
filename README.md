@@ -30,7 +30,7 @@ Sempre na raiz do projeto. Os nomes de dashboard são as pastas de `dashboards/`
 | `npm run novo -- <nome> [--stack vite\|jsp\|html]` | Criar um dashboard a partir de um modelo |
 | `npm run dev -- <nome>` | Desenvolver com preview ao vivo e dados reais |
 | `npm run build -- <nome>` | Gerar `dist-sankhya/<nome>.zip`, verificado, para importar no ERP |
-| `npm run emular -- <nome ou .zip>` | Abrir o pacote como o ERP abre, na sua máquina, antes de subir |
+| `npm run emular -- <nome ou .zip>` | Abrir o pacote como o ERP abre, na sua máquina, antes de subir: executa `<snk:query>`/JSTL e simula `openApp` |
 | `npm run verificar -- <nome ou .zip> [--consertar]` | Conferir um `.zip`, inclusive feito fora do kit |
 | `npm run diagnostico -- [nome]` | Gerar o pacote de testes para quando o componente não abre no ERP |
 | `npm run proxy` | Subir só o proxy de dados, para quem usa servidor de dev próprio |

@@ -19,7 +19,28 @@ npm run emular -- vendas       # serve o .zip como o ERP serve, com dados reais
 
 O emulador imita o servidor do ERP: página em `/mge/html5component.mge?entryPoint=...`, arquivos em `${BASE_FOLDER}`, **erro 500 para `index.jsp`** e **404 para caminho relativo**. O terminal lista cada pedido que falhou.
 
-Limites: ele não executa `<snk:query>`/JSTL nem tem `openApp`. Isso só a base de testes mostra.
+Ele também executa o que o ERP executaria no servidor:
+
+- **JSP:** `<snk:query>` (com dados reais), JSTL `c:` (`out`, `set`, `remove`, `if`, `choose/when/otherwise`, `forEach`, `forTokens`, `catch`, `url`), expressões `${...}` e o trecho Java comum `<% if (request.getAttribute("X") != null) { out.print("..."); } %>`. Um erro de consulta fora de `<c:catch>` dá **500**, como no ERP, com a mensagem na página e no terminal.
+- **Parâmetros do componente:** `${CODUSU_LOG}`, `${BASE_FOLDER}` e os parâmetros que você passar, usados como `${X}` e `:X` (período: `:X.INI`/`:X.FIN`):
+
+  ```bash
+  npm run emular -- vendas --param CODEMP=1 --param PERIODO.INI=01/10/2026 --param PERIODO.FIN=31/10/2026
+  ```
+
+  Também valem na URL (`...&CODEMP=1`) e num `parametros.json` dentro do dashboard (`{ "CODEMP": 1 }`).
+- **Consulta pelo navegador** (`/mge/service.sbr`, a que o SankhyaJX faz), com dados reais.
+- **`openApp`:** substituído por um simulador. Ao clicar em "Abrir no ERP", aparece um aviso na página e o terminal mostra a tela e a chave (`[emular] openApp: Central de Notas {"NUNOTA":123}`). A tela não abre (não há ERP local), mas dá para conferir se o botão chama a tela e o registro certos.
+
+**Diferenças em relação ao ERP** (o que só a base de testes confirma):
+
+| No emulador | No ERP |
+|---|---|
+| Todo SQL roda pela API, com a permissão do **aplicativo** do `.env` | `<snk:query>` roda no servidor; a consulta pelo navegador usa a permissão do **usuário logado** |
+| Só uma instrução `SELECT`/`WITH`, até 5.000 linhas por consulta | Sem esse limite no `<snk:query>` |
+| Parâmetro vira literal SQL (`01/10/2026` → `TO_DATE(...)`, `1,2` → lista) | Parâmetro é ligado pelo servidor, com o tipo do cadastro |
+| JSP: só as tags e o trecho Java acima; o resto (`<%= %>`, `c:import`, outras taglibs) para com um erro "não suportado no emulador" | JSP completo |
+| `openApp` só registra | Abre a tela |
 
 Para um `.zip` que não foi gerado pelo kit (outra stack, outra pessoa, versão antiga):
 

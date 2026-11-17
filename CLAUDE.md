@@ -9,6 +9,7 @@ Kit (público) para criar, empacotar, emular e depurar dashboards HTML5 do Const
 - `lib/jsp.mjs`: regras do JSP executado pelo ERP (html→jsp, `${BASE_FOLDER}`, EL permitido, caminhos relativos).
 - `lib/pacote.mjs`: monta o `.zip` (entradas de pasta + permissões Unix) e `verificarEntradas` (usado pelo build, `verificar` e `emular`).
 - `lib/comandos/*.mjs`: um arquivo por comando. `emular.mjs` imita o `html5component.mge`.
+- `lib/el.mjs` e `lib/jsp-emulado.mjs`: avaliador de `${...}` (sem `eval`) e intérprete do subconjunto de JSP usado no emulador (`snk:query`, JSTL `c:`, trecho `request.getAttribute`). Testes: `test/` (`npm test`).
 - `proxy/`: proxy de desenvolvimento (Node, sem dependências); `criarExecutor()` é usado pelo proxy e pelo emulador.
 - `runtime/`: código que roda no navegador, importado como `sankhya-kit/<arquivo>.js` (alias no Vite).
 - `modelos/`: modelos de dashboard (`vite`, `jsp`, `html`) e as páginas do diagnóstico (`modelos/diagnostico/`).
@@ -35,4 +36,4 @@ Ao descobrir um comportamento novo do ERP: registre em `docs/debug-e-logs.md` (e
 
 ## Antes de publicar uma mudança
 
-Em uma pasta de teste: `npm run novo -- x` (e `--stack jsp`), `npm run build -- x`, `npm run emular -- x`, `npm run diagnostico -- x`, `npm run verificar -- dist-sankhya/x.zip`. Atualize `CHANGELOG.md` e `version` no `package.json` (semver).
+`npm test`. Em uma pasta de teste: `npm run novo -- x` (e `--stack jsp`), `npm run build -- x`, `npm run emular -- x`, `npm run diagnostico -- x`, `npm run verificar -- dist-sankhya/x.zip`. Atualize `CHANGELOG.md` e `version` no `package.json` (semver).

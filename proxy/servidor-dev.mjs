@@ -80,7 +80,7 @@ export function criarExecutor() {
     const resposta = await cliente.post(ENDPOINT_SQL, { serviceName: SERVICO, requestBody: { sql } });
     const ms = Math.round(performance.now() - inicio);
     const linhas = resposta?.responseBody?.rows?.length ?? 0;
-    console.log(`[proxy] ${String(ms).padStart(6)} ms  status=${resposta?.status}  linhas=${linhas}  ${sql.slice(0, 90)}`);
+    console.log(`[proxy] ${String(ms).padStart(6)} ms  status=${resposta?.status}  linhas=${linhas}  ${sql.replace(/\s+/g, " ").slice(0, 90)}`);
     return resposta;
   };
 }
