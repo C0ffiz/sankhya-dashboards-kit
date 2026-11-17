@@ -1,6 +1,6 @@
 {
   "name": "sankhya-dashboards-kit",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "Kit para criar, empacotar e depurar dashboards HTML5 do Construtor de Componentes de BI do Sankhya (stacks vite, html e jsp)",
@@ -28,7 +28,8 @@
     "diagnostico": "node bin/sankhya-dash.mjs diagnostico",
     "verificar": "node bin/sankhya-dash.mjs verificar",
     "proxy": "node bin/sankhya-dash.mjs proxy",
-    "emular": "node bin/sankhya-dash.mjs emular"
+    "emular": "node bin/sankhya-dash.mjs emular",
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.5",

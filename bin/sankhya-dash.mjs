@@ -22,7 +22,8 @@ Uso (na raiz do projeto):  npm run <comando> -- [nome] [--opções]
   build <nome>                          gera dist-sankhya/<nome>.zip, verificado, pronto para o ERP
   diagnostico [nome]                    gera um .zip de testes para descobrir por que um componente não abre
   verificar <arquivo.zip|nome>          confere um .zip (inclusive de outra stack) [--consertar] [--entrada x.jsp]
-  emular <arquivo.zip|nome>             serve o .zip como o ERP serve, com dados reais, para testar antes de subir
+  emular <arquivo.zip|nome>             serve o .zip como o ERP serve, com dados reais (inclusive <snk:query>)
+                                        [--param NOME=valor ...] [--porta 5299]
   proxy [--porta 8787]                  sobe só o proxy local (stacks com servidor de dev próprio)
 
 Documentação: README.md e docs/ do sankhya-dashboards-kit.
@@ -34,10 +35,12 @@ function lerArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a.startsWith('--')) {
-      const [chave, valor] = a.slice(2).split('=');
-      if (valor !== undefined) opcoes[chave] = valor;
-      else if (argv[i + 1] && !argv[i + 1].startsWith('--')) opcoes[chave] = argv[++i];
-      else opcoes[chave] = true;
+      const igual = a.indexOf('=');
+      const chave = igual > 0 ? a.slice(2, igual) : a.slice(2);
+      let valor = igual > 0 ? a.slice(igual + 1) : true;
+      if (igual < 0 && argv[i + 1] && !argv[i + 1].startsWith('--')) valor = argv[++i];
+      // opção repetida (ex.: --param A=1 --param B=2) vira lista
+      opcoes[chave] = chave in opcoes ? [].concat(opcoes[chave], valor) : valor;
     } else posicionais.push(a);
   }
   return { posicionais, opcoes };

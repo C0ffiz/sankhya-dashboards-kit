@@ -84,4 +84,4 @@ Você escreve (ou gera) o JSP, e o servidor do ERP o executa. Exemplo completo e
 
   Se o gerador já produz o `.zip`, confira com `npm run verificar -- caminho/painel.zip`.
 
-O `npm run build` verifica o JSP (caminhos relativos, taglib declarada, entrada) e avisa sobre arquivos carregados da internet. O `npm run emular` mostra layout e arquivos, mas **não executa `<snk:query>`**: o teste de verdade é na base de testes.
+O `npm run build` verifica o JSP (caminhos relativos, taglib declarada, entrada) e avisa sobre arquivos carregados da internet. O `npm run emular` executa o JSP com dados reais (`<snk:query>`, JSTL e parâmetros por `--param`; veja [debug e logs](debug-e-logs.md#1-antes-de-subir-emular-e-verificar)). Permissões e o JSP completo só a base de testes confirma.

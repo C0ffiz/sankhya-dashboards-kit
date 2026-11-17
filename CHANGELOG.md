@@ -2,6 +2,16 @@
 
 Versionamento semântico. Projetos que usam o kit como dependência: veja [docs/usar-como-dependencia.md](docs/usar-como-dependencia.md).
 
+## 2.1.0 — 2026-11-17
+
+### Novo: o emulador executa o lado do servidor
+
+- **`npm run emular`** executa o JSP com dados reais: `<snk:query>`, JSTL `c:` (`out`, `set`, `remove`, `if`, `choose`, `forEach`, `forTokens`, `catch`, `url`), expressões `${...}` e o trecho `<% if (request.getAttribute("X") != null) { out.print("..."); } %>`. Erro de consulta fora de `<c:catch>` dá 500, como no ERP. Recurso não suportado para com uma mensagem clara (nunca é ignorado).
+- Parâmetros do componente por `--param NOME=valor` (repetível; `PERIODO.INI=...` para período), pela URL ou por `parametros.json` no dashboard. `${CODUSU_LOG}` e `${BASE_FOLDER}` preenchidos.
+- **`openApp` simulado:** mostra um aviso na página e registra a tela e a chave no terminal. No diagnóstico, T3 mostra `openApp=function (emulado)` e T5 passa a rodar de verdade.
+- Testes automáticos (`npm test`) do avaliador de expressões e do intérprete de JSP.
+- Diferenças em relação ao ERP documentadas em [debug e logs](docs/debug-e-logs.md#1-antes-de-subir-emular-e-verificar).
+
 ## 2.0.0 — 2026-11-17
 
 Primeira versão validada dentro de um ERP real. **Exige ajustes** em dashboards da versão 1 (seção "Migrar da 1.x").
