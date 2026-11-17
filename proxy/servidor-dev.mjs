@@ -2,17 +2,17 @@
 //
 // Recebe SQL do navegador (via Vite, em /api/sql), executa no Sankhya com as credenciais do .env
 // (DbExplorerSP.executeQuery) e devolve a resposta crua do Sankhya — o mesmo formato que o ERP
-// devolve ao SankhyaJX em produção, para que dashboards/shared/dados.js trate os dois igual.
+// devolve ao SankhyaJX em produção, para que runtime/dados.js trate os dois igual.
 //
 // NUNCA faz parte do build: só roda na sua máquina, escuta apenas em 127.0.0.1 e aceita só SELECT/WITH.
 // Normalmente é iniciado pelo `npm run dev`. Para rodar sozinho: npm run proxy
+// Lê o .env da pasta onde o comando roda (a raiz do projeto).
 import { createServer } from 'node:http';
-import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { lerEnv } from './env.mjs';
 import { SankhyaCliente } from './sankhya-cliente.mjs';
+import { ARQUIVO_ENV } from '../lib/projeto.mjs';
 
-const RAIZ = resolve(import.meta.dirname, '..');
 const SERVICO = 'DbExplorerSP.executeQuery';
 const ENDPOINT_SQL = `/gateway/v1/mge/service.sbr?serviceName=${SERVICO}&outputType=json`;
 const HOSTS_PERMITIDOS = new Set(['127.0.0.1', 'localhost']);
@@ -68,11 +68,35 @@ function lerCorpo(req) {
 }
 
 /**
- * Sobe o proxy em 127.0.0.1:<porta>. Lê as credenciais do .env da raiz do projeto.
+ * Executor de consultas: valida o SQL (só leitura) e chama o DbExplorerSP.executeQuery com as credenciais do .env.
+ * Devolve a resposta crua do Sankhya. Usado pelo proxy e pelo emulador (npm run emular).
+ * @returns {(sql: string) => Promise<object>}
+ */
+export function criarExecutor() {
+  const cliente = new SankhyaCliente(lerEnv(ARQUIVO_ENV)); // valida o .env já na criação
+  return async (sqlBruto) => {
+    const sql = validarSql(sqlBruto);
+    const inicio = performance.now();
+    const resposta = await cliente.post(ENDPOINT_SQL, { serviceName: SERVICO, requestBody: { sql } });
+    const ms = Math.round(performance.now() - inicio);
+    const linhas = resposta?.responseBody?.rows?.length ?? 0;
+    console.log(`[proxy] ${String(ms).padStart(6)} ms  status=${resposta?.status}  linhas=${linhas}  ${sql.slice(0, 90)}`);
+    return resposta;
+  };
+}
+
+/** Converte falhas de rede/HTTP numa mensagem para o usuário. */
+export function mensagemDeFalha(e) {
+  const causa = e.cause?.code || e.cause?.message;
+  return e.status ? e.message : `Falha ao contatar o Sankhya: ${e.message}${causa ? ` (${causa})` : ''}`;
+}
+
+/**
+ * Sobe o proxy em 127.0.0.1:<porta>. Lê as credenciais do .env da raiz do projeto (pasta do comando).
  * @returns {Promise<import('node:http').Server>}
  */
 export async function iniciarProxy({ porta = 8787 } = {}) {
-  const cliente = new SankhyaCliente(lerEnv(resolve(RAIZ, '.env'))); // valida o .env já na subida
+  const executar = criarExecutor();
 
   const servidor = createServer(async (req, res) => {
     if (!hostLocal(req)) return erro(res, 403, 'Host não permitido.');
@@ -90,21 +114,13 @@ export async function iniciarProxy({ porta = 8787 } = {}) {
       return erro(res, 400, e instanceof SyntaxError ? 'JSON inválido.' : e.message);
     }
 
-    const inicio = performance.now();
-    let resposta;
     try {
-      resposta = await cliente.post(ENDPOINT_SQL, { serviceName: SERVICO, requestBody: { sql } });
+      responder(res, 200, await executar(sql));
     } catch (e) {
-      const causa = e.cause?.code || e.cause?.message;
-      const msg = e.status ? e.message : `Falha ao contatar o Sankhya: ${e.message}${causa ? ` (${causa})` : ''}`;
+      const msg = mensagemDeFalha(e);
       console.error(`[proxy] erro: ${msg}`);
-      return erro(res, 502, msg);
+      erro(res, 502, msg);
     }
-
-    const ms = Math.round(performance.now() - inicio);
-    const linhas = resposta?.responseBody?.rows?.length ?? 0;
-    console.log(`[proxy] ${String(ms).padStart(6)} ms  status=${resposta?.status}  linhas=${linhas}  ${sql.slice(0, 90)}`);
-    responder(res, 200, resposta);
   });
 
   await new Promise((ok, falha) => {

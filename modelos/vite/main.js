@@ -1,6 +1,6 @@
 import './style.css';
-import { consultarSQL } from '../shared/dados.js';
-import { lerParametros } from '../shared/parametros.js';
+import { consultarSQL } from 'sankhya-kit/dados.js';
+import { lerParametros } from 'sankhya-kit/parametros.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
