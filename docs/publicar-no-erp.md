@@ -74,6 +74,7 @@ Verificado num ERP real com o pacote de diagnóstico:
 | `<snk:load/>` | Carrega os recursos da Sankhya na página |
 | `<snk:query>` + JSTL (`c:catch`, `c:forEach`, `c:choose`) | Consulta no servidor |
 | `window.openApp(resourceID, { CHAVE: valor })` | Abre uma tela nativa no registro (`sankhya-kit/erp.js`) |
+| Moldura (filtros laterais, barra de ícones, menu do gráfico) | Janelas de cima, mesma origem: dá para esconder com `esconderMoldura()` (`sankhya-kit/erp.js`) |
 | SankhyaJX | Declara-se como `class JX` global: use `JX`, nunca `window.JX` (que é `undefined`) |
 
 Algo deu errado? [Debug e logs](debug-e-logs.md).

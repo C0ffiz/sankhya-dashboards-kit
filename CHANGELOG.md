@@ -2,6 +2,14 @@
 
 Versionamento semântico. Projetos que usam o kit como dependência: veja [docs/usar-como-dependencia.md](docs/usar-como-dependencia.md).
 
+## 2.3.0 — 2026-11-19
+
+### Novo: esconder a moldura do ERP
+
+- `esconderMoldura()` em `sankhya-kit/erp.js` esconde o painel lateral de filtros e a barra de ícones da janela do dashboard, mantendo o menu do gráfico ("Imprimir Gráfico"); `menuGrafico: true` esconde também o menu. Só visual, sem consulta ao banco: funciona para usuários sem DBExplorer.
+- Diferente de `JX.removerFrame()`, procura só em volta do próprio componente (não mexe em outras abas) e nunca esconde um elemento que contém o componente.
+- Seletores em `MOLDURA`; no fim das tentativas, o console mostra quantos elementos de cada tipo foram encontrados.
+
 ## 2.2.0 — 2026-11-17
 
 ### Novo: consultas no servidor, para usuários sem permissão no DBExplorer

@@ -79,6 +79,21 @@ if (!r.ok) mostrarAviso(r.motivo); // fora do ERP (npm run dev) a função avisa
 
 Usa `window.openApp`, que o ERP oferece aos componentes HTML5. Só abre a tela; nada é gravado. `TELAS` traz Central de Notas, Parceiros, Produtos, Serviço e Movimentação Financeira. Para outra tela, descubra o `resourceID` no log de acessos (`TSIACM.RESOURCEID`).
 
+## Esconder a moldura do ERP (filtros laterais e barra de ícones)
+
+```js
+import { esconderMoldura } from 'sankhya-kit/erp.js';
+
+esconderMoldura(); // esconde o painel de filtros e a barra de ícones; mantém o menu "Imprimir Gráfico"
+esconderMoldura({ menuGrafico: true }); // esconde também o menu do gráfico
+```
+
+- Só mexe no visual da janela do usuário: nada é gravado e não há consulta ao banco, então funciona para **qualquer usuário, com ou sem DBExplorer**.
+- Age só em volta do próprio componente: outros dashboards abertos em outras abas ficam como estão.
+- Sem o painel de filtros, o usuário não troca os parâmetros do componente pelo ERP: use filtros dentro do dashboard.
+- As classes da moldura estão em `MOLDURA` (as mesmas do `JX.removerFrame()` do SankhyaJX). Num ERP com outro layout, abra o console (F12): depois de ~30 s aparece `[sankhya-kit] esconderMoldura: elementos encontrados {...}`. Contagem zero = classe diferente nessa versão do ERP.
+- Não use `JX.removerFrame({ instancia, paginaInicial })` com argumentos: ele consulta o banco pelo navegador (DBExplorer) e falha para usuários comuns. Sem argumentos, esconde também o menu do gráfico e mexe em todas as abas.
+
 ## Gráficos (ECharts)
 
 Importe de `echarts/core` só o que usar, para manter o pacote pequeno:
