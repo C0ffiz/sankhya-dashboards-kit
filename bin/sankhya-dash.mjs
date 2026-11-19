@@ -19,7 +19,8 @@ Uso (na raiz do projeto):  npm run <comando> -- [nome] [--opções]
 
   novo <nome> [--stack vite|jsp|html]   cria dashboards/<nome>/ a partir de um modelo (padrão: vite)
   dev <nome>                            preview com dados reais (proxy local + .env)
-  build <nome>                          gera dist-sankhya/<nome>.zip, verificado, pronto para o ERP
+  build <nome> [--sem-moldura[=tudo]]   gera dist-sankhya/<nome>.zip, verificado, pronto para o ERP
+                                        --sem-moldura: esconde filtros laterais e barra de ícones (=tudo: e o menu do gráfico)
   diagnostico [nome]                    gera um .zip de testes para descobrir por que um componente não abre
   verificar <arquivo.zip|nome>          confere um .zip (inclusive de outra stack) [--consertar] [--entrada x.jsp]
   emular <arquivo.zip|nome>             serve o .zip como o ERP serve, com dados reais (inclusive <snk:query>)

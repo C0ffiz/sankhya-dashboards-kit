@@ -55,6 +55,15 @@ export function abrirTela(tela, chaves) {
 
 /* ---------- Moldura do dashboard no ERP ---------- */
 
+/** O dashboard está dentro de uma janela do ERP (iframe da mesma origem). Fora dele (dev, emulador): false. */
+export function dentroDoErp() {
+  try {
+    return window.parent !== window && Boolean(window.frameElement);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Classes da moldura em volta do componente, nas janelas de cima (mesma origem).
  * Vêm do SankhyaJX (`JX.removerFrame()` sem argumentos, commit em JX_VERSAO.md); confira após atualizar o ERP.
@@ -146,4 +155,17 @@ export function esconderMoldura({ filtros = true, barraTopo = true, menuGrafico 
     }
   }, intervalo);
   return aplicar;
+}
+
+/**
+ * Aplica a moldura escolhida no build: `npm run build -- <nome> --sem-moldura` (ou `--sem-moldura=tudo`)
+ * grava <meta name="sankhya-kit-moldura"> na entrada. Sem a opção, não faz nada.
+ * Chame uma vez no início do dashboard. Devolve o valor aplicado ou null.
+ */
+export function aplicarMolduraDoBuild() {
+  const valor = document.querySelector('meta[name="sankhya-kit-moldura"]')?.content ?? null;
+  if (valor === 'esconder') esconderMoldura();
+  else if (valor === 'esconder-tudo') esconderMoldura({ menuGrafico: true });
+  else return null;
+  return valor;
 }

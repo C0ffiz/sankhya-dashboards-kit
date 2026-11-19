@@ -2,6 +2,14 @@
 
 Versionamento semântico. Projetos que usam o kit como dependência: veja [docs/usar-como-dependencia.md](docs/usar-como-dependencia.md).
 
+## 2.4.0 — 2026-11-19
+
+### Novo: moldura escolhida no build
+
+- `npm run build -- <nome> --sem-moldura` grava `<meta name="sankhya-kit-moldura" content="esconder">` na entrada do pacote; `--sem-moldura=tudo` esconde também o menu do gráfico. O dashboard chama `aplicarMolduraDoBuild()` (`sankhya-kit/erp.js`) uma vez; sem a opção, nada muda.
+- `dentroDoErp()`: diz se o dashboard está numa janela do ERP (para reservar espaço ao menu do gráfico, que fica por cima do canto superior direito).
+- Validado no ERP: `esconderMoldura()` esconde filtros e barra de ícones para usuário sem DBExplorer e mantém "Imprimir Gráfico".
+
 ## 2.3.0 — 2026-11-19
 
 ### Novo: esconder a moldura do ERP

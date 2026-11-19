@@ -1,6 +1,10 @@
 import './style.css';
 import { consultarSQL } from 'sankhya-kit/dados.js';
 import { lerParametros } from 'sankhya-kit/parametros.js';
+import { aplicarMolduraDoBuild } from 'sankhya-kit/erp.js';
+
+// npm run build -- <nome> --sem-moldura esconde filtros laterais e barra de ícones do ERP; sem a opção, não faz nada
+aplicarMolduraDoBuild();
 
 const $ = (id) => document.getElementById(id);
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
