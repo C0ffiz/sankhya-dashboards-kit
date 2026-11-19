@@ -81,12 +81,29 @@ Usa `window.openApp`, que o ERP oferece aos componentes HTML5. Só abre a tela; 
 
 ## Esconder a moldura do ERP (filtros laterais e barra de ícones)
 
+Pelo build (recomendado): no início do dashboard chame `aplicarMolduraDoBuild()` uma vez e escolha no comando:
+
+```js
+import { aplicarMolduraDoBuild } from 'sankhya-kit/erp.js';
+aplicarMolduraDoBuild(); // sem a opção no build, não faz nada
+```
+
+```
+npm run build -- vendas                     # moldura como o ERP mostra
+npm run build -- vendas --sem-moldura       # esconde filtros laterais e barra de ícones; mantém "Imprimir Gráfico"
+npm run build -- vendas --sem-moldura=tudo  # esconde também o menu do gráfico
+```
+
+A opção grava `<meta name="sankhya-kit-moldura">` na entrada do pacote. Direto no código, sem depender do build:
+
 ```js
 import { esconderMoldura } from 'sankhya-kit/erp.js';
 
 esconderMoldura(); // esconde o painel de filtros e a barra de ícones; mantém o menu "Imprimir Gráfico"
 esconderMoldura({ menuGrafico: true }); // esconde também o menu do gráfico
 ```
+
+- O menu do gráfico fica por cima do canto superior direito do dashboard: deixe uns 56 px livres ali (`dentroDoErp()` diz se o dashboard está numa janela do ERP, para aplicar o espaço só lá).
 
 - Só mexe no visual da janela do usuário: nada é gravado e não há consulta ao banco, então funciona para **qualquer usuário, com ou sem DBExplorer**.
 - Age só em volta do próprio componente: outros dashboards abertos em outras abas ficam como estão.

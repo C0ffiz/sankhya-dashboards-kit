@@ -77,4 +77,6 @@ Verificado num ERP real com o pacote de diagnóstico:
 | Moldura (filtros laterais, barra de ícones, menu do gráfico) | Janelas de cima, mesma origem: dá para esconder com `esconderMoldura()` (`sankhya-kit/erp.js`) |
 | SankhyaJX | Declara-se como `class JX` global: use `JX`, nunca `window.JX` (que é `undefined`) |
 
+Para esconder o painel lateral de filtros e a barra de ícones da janela: `npm run build -- <nome> --sem-moldura` (o dashboard precisa chamar `aplicarMolduraDoBuild()`; ver [Criar um dashboard](criar-dashboard.md#esconder-a-moldura-do-erp-filtros-laterais-e-barra-de-ícones)).
+
 Algo deu errado? [Debug e logs](debug-e-logs.md).
