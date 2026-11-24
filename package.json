@@ -1,6 +1,6 @@
 {
   "name": "sankhya-dashboards-kit",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
   "type": "module",
   "description": "Kit para criar, empacotar e depurar dashboards HTML5 do Construtor de Componentes de BI do Sankhya (stacks vite, html e jsp)",

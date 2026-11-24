@@ -2,6 +2,13 @@
 
 Versionamento semântico. Projetos que usam o kit como dependência: veja [docs/usar-como-dependencia.md](docs/usar-como-dependencia.md).
 
+## 2.5.0 — 2026-11-24
+
+### Novo: vários painéis ao mesmo tempo
+
+- `dev`, `proxy` e `emular` escolhem a primeira porta livre (proxy a partir de 8787, emulador a partir de 5299) em vez de falhar quando outro painel já está aberto em outro terminal. O Vite já fazia isso; agora ele aponta para o proxy certo.
+- Porta fixa continua possível: `PORTA_PROXY` no ambiente (dev/proxy) ou `--porta` (proxy/emular); nesse caso, porta ocupada é erro, como antes.
+
 ## 2.4.0 — 2026-11-19
 
 ### Novo: moldura escolhida no build
