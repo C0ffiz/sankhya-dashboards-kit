@@ -2,6 +2,13 @@
 
 Versionamento semântico. Projetos que usam o kit como dependência: veja [docs/usar-como-dependencia.md](docs/usar-como-dependencia.md).
 
+## 2.5.1 — 2026-11-25
+
+### Correção
+
+- `npm run emular` sem `--porta` falhava com "portaLivre is not defined": faltava o import em `lib/comandos/emular.mjs`.
+- Teste novo (`test/comandos.test.mjs`): todo comando importa de `lib/projeto.mjs` o que usa.
+
 ## 2.5.0 — 2026-11-24
 
 ### Novo: vários painéis ao mesmo tempo
